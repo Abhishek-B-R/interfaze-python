@@ -21,7 +21,7 @@ The official [Interfaze](https://interfaze.ai) SDK for Python.
 | **Vision & OCR** | `tasks.ocr` - text and structured data from images and PDFs |
 | **Web**          | `tasks.web_search`, `tasks.scrape`                          |
 | **Audio**        | `tasks.transcribe` - speech-to-text                         |
-| **Detection**    | `tasks.object_detection`, `tasks.gui_detection`              |
+| **Detection**    | `tasks.object_detection`, `tasks.gui_detection`             |
 | **Translation**  | `tasks.translate`                                           |
 | **Forecasting**  | `tasks.forecast` - time-series prediction                   |
 
@@ -121,20 +121,6 @@ URLs and base64 both work; `image/gif` and `image/avif` are rejected client-side
 - `reasoning_effort` also accepts `"on"`/`"off"`/`"auto"`.
 - Guardrails: `create(guard=["S1", "S12_IMAGE"], …)`.
 - Control options: `Interfaze(show_additional_info=..., bypass_moe=..., bypass_cache=..., admin_key=...)`.
-
-## LangChain
-
-`pip install interfaze[langchain]` adds a chat model pointed at Interfaze that keeps the extras a stock `ChatOpenAI` drops:
-
-```python
-from interfaze.langchain import ChatInterfaze
-
-llm = ChatInterfaze()  # reads INTERFAZE_API_KEY
-res = llm.invoke("Summarize the latest AI news")
-print(res.response_metadata.get("precontext"), res.response_metadata.get("vcache"))
-```
-
-`precontext`/`reasoning`/`vcache` land on `response_metadata`, `{"type": "video", ...}` content blocks are accepted, and inline side-channel tags are stripped.
 
 ## License
 

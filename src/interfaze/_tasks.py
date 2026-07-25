@@ -29,8 +29,6 @@ def _forecast_prompt(csv_source: str, periods: int, unit: str) -> str:
 
 
 class Tasks:
-    """High-level task helpers (sync). Each returns the task's raw ``result``."""
-
     def __init__(self, completions: Completions) -> None:
         self._c = completions
 
@@ -70,8 +68,6 @@ class Tasks:
 
 
 class AsyncTasks:
-    """High-level task helpers (async)."""
-
     def __init__(self, completions: AsyncCompletions) -> None:
         self._c = completions
 

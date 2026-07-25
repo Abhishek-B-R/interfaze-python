@@ -1,5 +1,3 @@
-"""Official Interfaze SDK for Python."""
-
 from __future__ import annotations
 
 from openai import (
@@ -23,7 +21,12 @@ from ._client import AsyncInterfaze, Interfaze
 from ._constants import GUARD_CODES, INTERFAZE_BASE_URL, INTERFAZE_MODEL, TASK_NAMES
 from ._errors import InterfazeError
 from ._schema import empty_task_schema, response_format
-from ._stream import AsyncInterfazeStream, InterfazeStream
+from ._stream import (
+    AsyncInterfazeStream,
+    InterfazeStream,
+    _SideChannelFilter as SideChannelFilter,
+    strip_side_channels,
+)
 from ._types import (
     GuardCode,
     InterfazeChatCompletion,
@@ -41,6 +44,8 @@ __all__ = [
     "InterfazeChatCompletion",
     "InterfazeStream",
     "AsyncInterfazeStream",
+    "strip_side_channels",
+    "SideChannelFilter",
     "Precontext",
     "TaskName",
     "GuardCode",

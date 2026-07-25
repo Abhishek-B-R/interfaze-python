@@ -10,7 +10,6 @@ _VALID = set(GUARD_CODES)
 
 
 def guard_tag(codes: List[GuardCode]) -> str:
-    """Serialize guardrail categories into the ``<guard>...</guard>`` tag, validating codes."""
     if not codes:
         raise InterfazeError("`guard` must contain at least one code")
     invalid = [c for c in codes if c not in _VALID]

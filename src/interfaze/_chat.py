@@ -133,7 +133,7 @@ class Completions(_CompletionsBase):
         if stream:
             return cast(
                 "Stream[ChatCompletionChunk]", self._client.chat.completions.create(stream=True, **kw)
-            )
+            )  # ty:ignore[redundant-cast]
         raw = self._client.chat.completions.create(**kw)
         return to_interfaze(cast(ChatCompletion, raw), strip)
 
@@ -150,6 +150,7 @@ class Completions(_CompletionsBase):
         kw, strip = self._kwargs(messages, model, task, guard, response_format, kwargs)
         return InterfazeStream(self._client, kw, strip)
 
+    # Structured output via a Pydantic model, extras (``vcache``/``precontext``) are present but untyped here; use ``create`` for the typed extended completion. (same for async)
     def parse(
         self,
         *,
@@ -159,11 +160,6 @@ class Completions(_CompletionsBase):
         guard: Optional[List[GuardCode]] = None,
         **kwargs: Any,
     ) -> "ParsedChatCompletion[Any]":
-        """Structured output via a Pydantic model (delegates to the OpenAI client's ``parse``).
-
-        Interfaze extras (``vcache``/``precontext``) are present but untyped here; use ``create`` for
-        the typed extended completion.
-        """
         msgs = prepare(messages, model, None, guard, None)[0]
         return self._client.chat.completions.parse(
             model=model, messages=msgs, response_format=response_format, **kwargs
@@ -171,18 +167,14 @@ class Completions(_CompletionsBase):
 
     @property
     def with_raw_response(self) -> Any:
-        """Raw-HTTP escape hatch (delegates to the OpenAI client; bypasses task/guard preprocessing)."""
         return self._client.chat.completions.with_raw_response
 
     @property
     def with_streaming_response(self) -> Any:
-        """Streaming raw-HTTP escape hatch (delegates to the OpenAI client)."""
         return self._client.chat.completions.with_streaming_response
 
 
 class AsyncCompletions(_CompletionsBase):
-    """`interfaze.chat.completions` (async)."""
-
     def __init__(self, client: AsyncOpenAI) -> None:
         self._client = client
 
@@ -227,7 +219,7 @@ class AsyncCompletions(_CompletionsBase):
             return cast(
                 "AsyncStream[ChatCompletionChunk]",
                 await self._client.chat.completions.create(stream=True, **kw),
-            )
+            )  # ty:ignore[redundant-cast]
         raw = await self._client.chat.completions.create(**kw)
         return to_interfaze(cast(ChatCompletion, raw), strip)
 
@@ -253,11 +245,6 @@ class AsyncCompletions(_CompletionsBase):
         guard: Optional[List[GuardCode]] = None,
         **kwargs: Any,
     ) -> "ParsedChatCompletion[Any]":
-        """Structured output via a Pydantic model (delegates to the OpenAI client's ``parse``).
-
-        Interfaze extras (``vcache``/``precontext``) are present but untyped here; use ``create`` for
-        the typed extended completion.
-        """
         msgs = prepare(messages, model, None, guard, None)[0]
         return await self._client.chat.completions.parse(
             model=model, messages=msgs, response_format=response_format, **kwargs
@@ -265,12 +252,10 @@ class AsyncCompletions(_CompletionsBase):
 
     @property
     def with_raw_response(self) -> Any:
-        """Raw-HTTP escape hatch (delegates to the OpenAI client; bypasses task/guard preprocessing)."""
         return self._client.chat.completions.with_raw_response
 
     @property
     def with_streaming_response(self) -> Any:
-        """Streaming raw-HTTP escape hatch (delegates to the OpenAI client)."""
         return self._client.chat.completions.with_streaming_response
 
 

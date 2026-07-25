@@ -47,12 +47,6 @@ def _build_headers(
 
 
 class Interfaze:
-    """Synchronous Interfaze client — a curated wrapper over ``openai.OpenAI``.
-
-    Exposes the endpoints Interfaze implements (``chat.completions``, ``models``) plus task
-    helpers (``tasks.*``). The underlying client is available at ``.openai``.
-    """
-
     def __init__(
         self,
         *,
@@ -80,8 +74,6 @@ class Interfaze:
 
 
 class AsyncInterfaze:
-    """Asynchronous Interfaze client — a curated wrapper over ``openai.AsyncOpenAI``."""
-
     def __init__(
         self,
         *,

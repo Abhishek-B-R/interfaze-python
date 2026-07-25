@@ -59,26 +59,22 @@ def _assert_allowed(mime: Optional[str]) -> None:
 
 
 def data_url(data: BytesLike, mime_type: str) -> str:
-    """Build a base64 ``data:`` URI from raw bytes."""
     _assert_allowed(mime_type)
     return f"data:{mime_type};base64,{_base64.b64encode(bytes(data)).decode('ascii')}"
 
 
 def from_path(path: Union[str, Path]) -> str:
-    """Read a local file into a ``data:`` URI (mime by extension)."""
     p = Path(path)
     mime = _EXT_MIME.get((p.suffix.lstrip(".")).lower(), "application/octet-stream")
     return data_url(p.read_bytes(), mime)
 
 
 def image(src: str) -> Dict[str, Any]:
-    """Image content part. ``src`` = https URL or ``data:`` URI."""
     _assert_allowed(_mime_from_data_url(src) or _EXT_MIME.get(_ext_of(src) or ""))
     return {"type": "image_url", "image_url": {"url": src}}
 
 
 def file(src: str, *, filename: Optional[str] = None, format: Optional[str] = None) -> Dict[str, Any]:
-    """File content part (pdf/csv/xml/json/text/audio/video/…). ``src`` = https URL or ``data:`` URI."""
     mime = format or _mime_from_data_url(src) or _EXT_MIME.get(_ext_of(filename or src) or "")
     _assert_allowed(mime)
     f: Dict[str, Any] = {"file_data": src}
@@ -89,8 +85,8 @@ def file(src: str, *, filename: Optional[str] = None, format: Optional[str] = No
     return {"type": "file", "file": f}
 
 
+# audio_url is a dead field in Interfaze
 def audio(src: str, *, format: Optional[str] = None) -> Dict[str, Any]:
-    """Audio content part via ``input_audio`` (``audio_url`` is a dead field in Interfaze)."""
     mime = _mime_from_data_url(src)
     _assert_allowed(mime or _EXT_MIME.get(_ext_of(src) or ""))
     fmt = format or (mime.split("/", 1)[-1] if mime else _ext_of(src)) or "wav"
@@ -98,12 +94,10 @@ def audio(src: str, *, format: Optional[str] = None) -> Dict[str, Any]:
 
 
 def video(src: str, *, filename: Optional[str] = None) -> Dict[str, Any]:
-    """Video content part — rides on the ``file`` part (there is no video content part)."""
     return file(src, filename=filename)
 
 
 def auto_part(src: str, *, filename: Optional[str] = None, format: Optional[str] = None) -> Dict[str, Any]:
-    """Pick a content part by media type: image → image_url, audio → input_audio, else file."""
     mime = format or _mime_from_data_url(src) or _EXT_MIME.get(_ext_of(filename or src) or "")
     if mime and mime.startswith("image/"):
         return image(src)

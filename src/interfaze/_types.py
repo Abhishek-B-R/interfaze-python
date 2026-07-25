@@ -41,16 +41,12 @@ ReasoningEffort = Literal["minimal", "low", "medium", "high", "on", "off", "auto
 
 
 class Precontext(BaseModel):
-    """One internal task's output; lenient since raw tool-call entries omit name/result."""
-
     model_config = ConfigDict(extra="allow")
     name: Optional[str] = None
     result: Any = None
 
 
 class InterfazeChatCompletion(ChatCompletion):
-    """ChatCompletion plus Interfaze extras: precontext, reasoning, vcache, debug."""
-
     precontext: Optional[List[Precontext]] = None
     reasoning: Optional[str] = None
     vcache: bool = False

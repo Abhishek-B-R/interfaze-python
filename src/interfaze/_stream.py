@@ -16,8 +16,8 @@ def _tag(tag: str) -> "re.Pattern[str]":
     return re.compile(rf"<{tag}>([\s\S]*?)</{tag}>")
 
 
+# Pull ``<think>``/``<precontext>`` blocks out of streamed content
 def strip_side_channels(content: str) -> Tuple[str, Optional[str], Optional[List[Dict[str, Any]]]]:
-    """Pull ``<think>``/``<precontext>`` blocks out of streamed content; return the rest as text."""
     think_re, pre_re = _tag("think"), _tag("precontext")
     thinks = [m.strip() for m in think_re.findall(content)]
     text = pre_re.sub("", think_re.sub("", content))
@@ -34,8 +34,8 @@ def strip_side_channels(content: str) -> Tuple[str, Optional[str], Optional[List
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
 
 
+# This exists because Interfaze wraps ``json_object`` content in a ```json fence; unwrap it.
 def strip_json_fence(content: str) -> str:
-    """Interfaze wraps ``json_object`` content in a ```json fence; unwrap it."""
     t = content.strip()
     if not t.startswith("```"):
         return content
@@ -53,9 +53,8 @@ def _suffix_prefix_len(s: str, tag: str) -> int:
     return 0
 
 
+# Incrementally strips ``<think>``/``<precontext>`` blocks
 class _SideChannelFilter:
-    """Incrementally strips ``<think>``/``<precontext>`` blocks, buffering tags split across chunks."""
-
     def __init__(self) -> None:
         self._buf = ""
         self._close: Optional[str] = None
@@ -103,7 +102,6 @@ class _SideChannelFilter:
 def _clean_for_events(
     chunk: ChatCompletionChunk, filt: _SideChannelFilter, role_injected: bool
 ) -> "Tuple[ChatCompletionChunk, bool]":
-    """Clean a chunk for openai's event state: strip side channels from content, inject a role."""
     cleaned = chunk.model_copy(deep=True)
     if not cleaned.choices:
         return cleaned, role_injected
@@ -195,8 +193,6 @@ class _State:
 
 
 class InterfazeStream:
-    """Sync streaming helper — iterate OpenAI-style events, then ``get_final_completion()``."""
-
     def __init__(self, client: OpenAI, kwargs: Dict[str, Any], strip_fence: bool = False) -> None:
         self._client = client
         self._kwargs = kwargs
@@ -225,7 +221,6 @@ class InterfazeStream:
         self._done = True
 
     def text_deltas(self) -> "Iterator[str]":
-        """Iterate only the visible text (no side channels, no events) — for plain-token consumers."""
         if self._started:
             raise InterfazeError("This stream has already been consumed.")
         self._started = True
@@ -260,8 +255,6 @@ class InterfazeStream:
 
 
 class AsyncInterfazeStream:
-    """Async streaming helper — ``async for`` OpenAI-style events, then ``await get_final_completion()``."""
-
     def __init__(self, client: AsyncOpenAI, kwargs: Dict[str, Any], strip_fence: bool = False) -> None:
         self._client = client
         self._kwargs = kwargs
@@ -292,7 +285,6 @@ class AsyncInterfazeStream:
         self._done = True
 
     async def text_deltas(self) -> "AsyncIterator[str]":
-        """Iterate only the visible text (no side channels, no events) — for plain-token consumers."""
         if self._started:
             raise InterfazeError("This stream has already been consumed.")
         self._started = True
