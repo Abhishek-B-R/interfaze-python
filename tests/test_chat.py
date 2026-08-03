@@ -115,7 +115,7 @@ def test_control_headers():
         messages=[{"role": "user", "content": "x"}]
     )
     h = last_headers(route)
-    assert h["x-show-additional-info"] == "true" and h["x-bypass-cache"] == "true"
+    assert h["x-show-additional-info"] == "true" and h["x-interfaze-bypass-cache"] == "true"
 
 
 @respx.mock
@@ -124,14 +124,14 @@ def test_all_control_headers_present():
     Interfaze(
         api_key="t",
         show_additional_info=True,
-        bypass_moe=True,
+        bypass_moa=True,
         bypass_cache=True,
         admin_key="admin-secret",
     ).chat.completions.create(messages=[{"role": "user", "content": "x"}])
     h = last_headers(route)
     assert h["x-show-additional-info"] == "true"
-    assert h["x-bypass-moe"] == "true"
-    assert h["x-bypass-cache"] == "true"
+    assert h["x-interfaze-bypass-moa"] == "true"
+    assert h["x-interfaze-bypass-cache"] == "true"
     assert h["x-admin-key"] == "admin-secret"
 
 
@@ -141,8 +141,8 @@ def test_default_headers_omit_control_flags_when_unset():
     Interfaze(api_key="t").chat.completions.create(messages=[{"role": "user", "content": "x"}])
     h = last_headers(route)
     assert "x-show-additional-info" not in h
-    assert "x-bypass-moe" not in h
-    assert "x-bypass-cache" not in h
+    assert "x-interfaze-bypass-moa" not in h
+    assert "x-interfaze-bypass-cache" not in h
     assert "x-admin-key" not in h
 
 

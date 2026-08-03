@@ -304,7 +304,7 @@ Set router, cache, and streaming behavior once on the client:
 ```python
 interfaze = Interfaze(
     show_additional_info=True,  # stream <precontext> deltas as they're produced
-    bypass_moe=True,            # skip the mixture-of-experts router
+    bypass_moa=True,            # skip the mixture-of-architecture router
     bypass_cache=True,          # skip the semantic cache
 )
 ```

@@ -10,7 +10,7 @@ from ._constants import (
     DEFAULT_TIMEOUT,
     HEADER_ADMIN_KEY,
     HEADER_BYPASS_CACHE,
-    HEADER_BYPASS_MOE,
+    HEADER_BYPASS_MOA,
     HEADER_SHOW_ADDITIONAL_INFO,
     INTERFAZE_BASE_URL,
 )
@@ -30,15 +30,15 @@ def _resolve_key(api_key: Optional[str]) -> str:
 def _build_headers(
     default_headers: Optional[Dict[str, str]],
     show_additional_info: bool,
-    bypass_moe: bool,
+    bypass_moa: bool,
     bypass_cache: bool,
     admin_key: Optional[str],
 ) -> Dict[str, str]:
     headers: Dict[str, str] = dict(default_headers or {})
     if show_additional_info:
         headers[HEADER_SHOW_ADDITIONAL_INFO] = "true"
-    if bypass_moe:
-        headers[HEADER_BYPASS_MOE] = "true"
+    if bypass_moa:
+        headers[HEADER_BYPASS_MOA] = "true"
     if bypass_cache:
         headers[HEADER_BYPASS_CACHE] = "true"
     if admin_key:
@@ -53,7 +53,7 @@ class Interfaze:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         show_additional_info: bool = False,
-        bypass_moe: bool = False,
+        bypass_moa: bool = False,
         bypass_cache: bool = False,
         admin_key: Optional[str] = None,
         default_headers: Optional[Dict[str, str]] = None,
@@ -64,7 +64,7 @@ class Interfaze:
             api_key=_resolve_key(api_key),
             base_url=base_url or INTERFAZE_BASE_URL,
             default_headers=_build_headers(
-                default_headers, show_additional_info, bypass_moe, bypass_cache, admin_key
+                default_headers, show_additional_info, bypass_moa, bypass_cache, admin_key
             ),
             **kwargs,
         )
@@ -80,7 +80,7 @@ class AsyncInterfaze:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         show_additional_info: bool = False,
-        bypass_moe: bool = False,
+        bypass_moa: bool = False,
         bypass_cache: bool = False,
         admin_key: Optional[str] = None,
         default_headers: Optional[Dict[str, str]] = None,
@@ -91,7 +91,7 @@ class AsyncInterfaze:
             api_key=_resolve_key(api_key),
             base_url=base_url or INTERFAZE_BASE_URL,
             default_headers=_build_headers(
-                default_headers, show_additional_info, bypass_moe, bypass_cache, admin_key
+                default_headers, show_additional_info, bypass_moa, bypass_cache, admin_key
             ),
             **kwargs,
         )

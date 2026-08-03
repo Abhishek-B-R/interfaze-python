@@ -43,6 +43,6 @@ BLACKLISTED_FORMATS = ("image/gif", "image/avif")
 
 # Interfaze control-plane headers.
 HEADER_SHOW_ADDITIONAL_INFO = "x-show-additional-info"
-HEADER_BYPASS_MOE = "x-bypass-moe"
-HEADER_BYPASS_CACHE = "x-bypass-cache"
+HEADER_BYPASS_MOA = "x-interfaze-bypass-moa"
+HEADER_BYPASS_CACHE = "x-interfaze-bypass-cache"
 HEADER_ADMIN_KEY = "x-admin-key"
