@@ -24,8 +24,10 @@ from ._schema import empty_task_schema, response_format
 from ._stream import (
     AsyncInterfazeStream,
     InterfazeStream,
-    _SideChannelFilter as SideChannelFilter,
     strip_side_channels,
+)
+from ._stream import (
+    _SideChannelFilter as SideChannelFilter,
 )
 from ._types import (
     GuardCode,
@@ -35,7 +37,7 @@ from ._types import (
     TaskName,
 )
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 __all__ = [
     "Interfaze",
