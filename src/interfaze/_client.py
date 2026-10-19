@@ -49,6 +49,9 @@ def _build_headers(
 # OpenAI() fills `organization` / `project` from OPENAI_ORG_ID / OPENAI_PROJECT_ID and sends them
 # as OpenAI-Organization / OpenAI-Project headers. Those are OpenAI account ids, so keep them off
 # Interfaze requests unless they were passed in explicitly.
+# This only covers the client built here: one derived via client.openai.with_options(...) or
+# .copy() goes back through the constructor with organization/project None, so it reads the
+# env vars again and sends them.
 def _drop_openai_env_ids(client: Union[OpenAI, AsyncOpenAI], kwargs: Dict[str, Any]) -> None:
     client.organization = kwargs.get("organization")
     client.project = kwargs.get("project")
